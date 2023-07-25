@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "milk",
+  "version": "${version}",
+  "name": "MilkRising",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/milk/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "milk.milk.client.MilkClient"
+    ],
+    "main": [
+      "milk.milk.Milk"
+    ]
+  },
+  "mixins": [
+    "milk.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.12.12",
+    "minecraft": "1.20.1"
+  }
+}
