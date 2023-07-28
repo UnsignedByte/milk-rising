@@ -2,10 +2,7 @@ package milk.milk;
 import milk.milk.blocks.MilkBlock;
 import milk.milk.blocks.MilkFluid;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
-import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext;
-import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
-import net.fabricmc.fabric.api.biome.v1.ModificationPhase;
+import net.fabricmc.fabric.api.biome.v1.*;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -16,6 +13,7 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.MapColor;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
@@ -75,12 +73,27 @@ public class Milk implements ModInitializer {
                 ModificationPhase.REPLACEMENTS,
                 biomes,
                 context -> {
-                    context.getSpawnSettings().clearSpawns();
-                    context.getSpawnSettings().addSpawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(
-                            Registries.ENTITY_TYPE.get(RegistryKey.of(RegistryKeys.ENTITY_TYPE, new Identifier("minecraft:cow"))),
+                    BiomeModificationContext.SpawnSettingsContext settings = context.getSpawnSettings();
+                    settings.clearSpawns();
+                    settings.setCreatureSpawnProbability(0.99f);
+                    settings.setSpawnCost(EntityType.COW, 0.2, 0.7);
+                    SpawnSettings.SpawnEntry entry = new SpawnSettings.SpawnEntry(
+                            EntityType.COW,
                             100,
-                            4,
-                            4
+                            5,
+                            20
+                    );
+                    settings.addSpawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(
+                            EntityType.COW,
+                            100,
+                            5,
+                            10
+                    ));
+                    settings.addSpawn(SpawnGroup.WATER_AMBIENT, new SpawnSettings.SpawnEntry(
+                            EntityType.COW,
+                            100,
+                            5,
+                            25
                     ));
                 }
         );
