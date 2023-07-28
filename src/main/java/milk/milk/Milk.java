@@ -2,6 +2,10 @@ package milk.milk;
 import milk.milk.blocks.MilkBlock;
 import milk.milk.blocks.MilkFluid;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
+import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext;
+import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
+import net.fabricmc.fabric.api.biome.v1.ModificationPhase;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -12,13 +16,20 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.MapColor;
+import net.minecraft.entity.SpawnGroup;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.biome.SpawnSettings;
+
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 
 import static net.minecraft.item.Items.BUCKET;
 import static net.minecraft.item.Items.MILK_BUCKET;
@@ -26,7 +37,9 @@ import static net.minecraft.item.Items.MILK_BUCKET;
 public class Milk implements ModInitializer {
     public static final String MOD_NAME = "milk";
 
-    public static final TagKey<Fluid> MILK_TAG = TagKey.of(RegistryKeys.FLUID, new Identifier("milk"));
+    public static final TagKey<Fluid> MILK_TAG = TagKey.of(RegistryKeys.FLUID, id("milk"));
+
+    public static AtomicInteger MILK_HEIGHT = new AtomicInteger(164);
 
     public static final FlowableFluid STILL_MILK = Registry.register(
             Registries.FLUID,
@@ -48,7 +61,6 @@ public class Milk implements ModInitializer {
     public void onInitialize() {
         System.out.println("Mod Initializing");
 
-
         // transfer
         FluidStorage.combinedItemApiProvider(MILK_BUCKET).register(context ->
                 new FullItemFluidStorage(context, bucket -> ItemVariant.of(BUCKET), FluidVariant.of(STILL_MILK), FluidConstants.BUCKET)
@@ -56,8 +68,23 @@ public class Milk implements ModInitializer {
         FluidStorage.combinedItemApiProvider(BUCKET).register(context ->
                 new EmptyItemFluidStorage(context, bucket -> ItemVariant.of(MILK_BUCKET), STILL_MILK, FluidConstants.BUCKET)
         );
-    }
 
+        Predicate<BiomeSelectionContext> biomes = BiomeSelectors.all();
+
+        BiomeModifications.create(id("creature_change")).add(
+                ModificationPhase.REPLACEMENTS,
+                biomes,
+                context -> {
+                    context.getSpawnSettings().clearSpawns();
+                    context.getSpawnSettings().addSpawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(
+                            Registries.ENTITY_TYPE.get(RegistryKey.of(RegistryKeys.ENTITY_TYPE, new Identifier("minecraft:cow"))),
+                            100,
+                            4,
+                            4
+                    ));
+                }
+        );
+    }
 
     public static Identifier id(String path) {
         return new Identifier(MOD_NAME, path);

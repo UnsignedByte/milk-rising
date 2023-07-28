@@ -25,21 +25,21 @@ public abstract class LavaFluidMixin extends FlowableFluid {
         if (direction == Direction.DOWN) {
             FluidState fluidState2 = world.getFluidState(pos);
             if (this.isIn(FluidTags.LAVA)) {
-                if (fluidState2.isIn(FluidTags.WATER)){
+                if (fluidState2.isIn(MILK_TAG)) {
+                    if (state.getBlock() instanceof FluidBlock) {
+                        world.setBlockState(pos, Blocks.WHITE_CONCRETE.getDefaultState(), 3);
+                    }
+
+                    this.playExtinguishEvent(world, pos);
+                    return;
+
+                } else if (fluidState2.isIn(FluidTags.WATER)){
                     if (state.getBlock() instanceof FluidBlock) {
                         world.setBlockState(pos, Blocks.STONE.getDefaultState(), 3);
                     }
 
                     this.playExtinguishEvent(world, pos);
                     return;
-                } else if (fluidState2.isIn(MILK_TAG)) {
-                    if (state.getBlock() instanceof FluidBlock) {
-                        world.setBlockState(pos, Blocks.DIORITE.getDefaultState(), 3);
-                    }
-
-                    this.playExtinguishEvent(world, pos);
-                    return;
-
                 }
             }
         }

@@ -6,7 +6,9 @@
   "mixins": [
     "MilkBucketItemMixin",
     "WaterFluidMixin",
-    "LavaFluidMixin"
+    "LavaFluidMixin",
+    "CowEntityMixin",
+    "FluidBlockMixin"
   ],
   "client": [
   ],

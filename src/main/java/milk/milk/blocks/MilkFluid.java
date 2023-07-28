@@ -70,7 +70,8 @@ public abstract class MilkFluid extends FlowableFluid {
     @Override
     public boolean canBeReplacedWith(FluidState state, BlockView world, BlockPos pos, Fluid fluid, Direction direction) {
         FluidState otherstate = world.getFluidState(pos.offset(direction.getOpposite()));
-        return(fluid.isIn(FluidTags.WATER) && state.getLevel() < otherstate.getLevel())
+        return !fluid.matchesType(state.getFluid()) &&
+                (fluid.isIn(FluidTags.WATER) && state.getLevel() < otherstate.getLevel())
                 || (direction ==Direction.DOWN && !fluid.isIn(MILK_TAG));
     }
 
