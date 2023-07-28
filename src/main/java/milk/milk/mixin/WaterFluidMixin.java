@@ -17,9 +17,9 @@ public abstract class WaterFluidMixin extends FlowableFluid {
     @Override
     public boolean canBeReplacedWith(FluidState state, BlockView world, BlockPos pos, Fluid fluid, Direction direction) {
         FluidState otherstate = world.getFluidState(pos.offset(direction.getOpposite()));
-        return (
-                (direction == Direction.DOWN && !fluid.isIn(MILK_TAG))
-                || (!fluid.isIn(MILK_TAG) && state.getLevel() <= otherstate.getLevel())
+        return !fluid.matchesType(state.getFluid()) && (
+                direction == Direction.DOWN
+                || (fluid.isIn(MILK_TAG) && state.getLevel() <= otherstate.getLevel())
                 );
     }
 }

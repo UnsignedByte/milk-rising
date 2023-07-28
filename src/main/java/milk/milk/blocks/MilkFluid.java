@@ -2,7 +2,6 @@ package milk.milk.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.fluid.FlowableFluid;
@@ -72,7 +71,7 @@ public abstract class MilkFluid extends FlowableFluid {
         FluidState otherstate = world.getFluidState(pos.offset(direction.getOpposite()));
         return !fluid.matchesType(state.getFluid()) &&
                 (fluid.isIn(FluidTags.WATER) && state.getLevel() < otherstate.getLevel())
-                || (direction ==Direction.DOWN && !fluid.isIn(MILK_TAG));
+                || direction == Direction.DOWN;
     }
 
     @Override
