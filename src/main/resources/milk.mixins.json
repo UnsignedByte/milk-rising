@@ -9,7 +9,9 @@
     "LavaFluidMixin",
     "CowEntityMixin",
     "FluidBlockMixin",
-    "CameraMixin"
+    "CameraMixin",
+    "SpawnRestrictionMixin",
+    "SpawnHelperMixin"
   ],
   "client": [
   ],

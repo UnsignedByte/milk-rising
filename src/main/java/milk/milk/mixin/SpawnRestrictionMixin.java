@@ -19,22 +19,18 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static milk.milk.Milk.MILK_BLOCK;
 import static milk.milk.Milk.MILK_TAG;
 
 @Mixin(SpawnRestriction.class)
 public class SpawnRestrictionMixin {
-    @ModifyVariable(method = "register", at = @At(value = "HEAD"), argsOnly = true)
-    private static SpawnRestriction.Location cow(SpawnRestriction.Location location) {
-        return SpawnRestriction.Location.NO_RESTRICTIONS;
-    }
-
     /**
      * @author UnsignedByte
      * @reason funny
      */
     @Overwrite
     public static <T extends Entity> boolean canSpawn(EntityType<T> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        return  world.getFluidState(pos).isIn(MILK_TAG)
+        return world.getFluidState(pos).getFluid().isIn(MILK_TAG) || world.getBlockState(pos).getBlock() == MILK_BLOCK
                 || AnimalEntity.isValidNaturalSpawn((EntityType<? extends AnimalEntity>) type, world, spawnReason, pos, random);
     }
 }
