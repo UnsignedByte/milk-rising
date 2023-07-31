@@ -18,19 +18,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static milk.milk.Milk.MILK_BLOCK;
 import static milk.milk.Milk.MILK_TAG;
 
 @Mixin(SpawnRestriction.class)
 public class SpawnRestrictionMixin {
-    /**
-     * @author UnsignedByte
-     * @reason funny
-     */
-    @Overwrite
-    public static <T extends Entity> boolean canSpawn(EntityType<T> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        return world.getFluidState(pos).getFluid().isIn(MILK_TAG) || world.getBlockState(pos).getBlock() == MILK_BLOCK
-                || AnimalEntity.isValidNaturalSpawn((EntityType<? extends AnimalEntity>) type, world, spawnReason, pos, random);
+    @Inject(method = "canSpawn", at = @At("HEAD"), cancellable = true)
+    private static <T extends Entity> void canSpawn(EntityType<T> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir) {
+        if (type == EntityType.COW) {
+            cir.setReturnValue(world.getFluidState(pos).getFluid().isIn(MILK_TAG) || world.getBlockState(pos).getBlock() == MILK_BLOCK
+                    || MobEntity.canMobSpawn((EntityType<? extends MobEntity>) type, world, spawnReason, pos, random)
+                    || AnimalEntity.isValidNaturalSpawn((EntityType<? extends AnimalEntity>) type, world, spawnReason, pos, random));
+        }
     }
 }

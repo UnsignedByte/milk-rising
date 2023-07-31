@@ -74,13 +74,19 @@ public class Milk implements ModInitializer {
                 biomes,
                 context -> {
                     BiomeModificationContext.SpawnSettingsContext settings = context.getSpawnSettings();
-                    settings.clearSpawns();
+                    settings.clearSpawns(SpawnGroup.CREATURE);
                     settings.setSpawnCost(EntityType.COW, 0.7, 1);
-                    settings.addSpawn(SpawnGroup.AMBIENT, new SpawnSettings.SpawnEntry(
+                    settings.addSpawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(
                             EntityType.COW,
                             100,
-                            2,
-                            6
+                            1,
+                            2
+                    ));
+                    settings.addSpawn(SpawnGroup.MONSTER, new SpawnSettings.SpawnEntry(
+                            EntityType.COW,
+                            200,
+                            1,
+                            4
                     ));
                 }
         );
