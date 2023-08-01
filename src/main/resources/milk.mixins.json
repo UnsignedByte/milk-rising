@@ -11,7 +11,11 @@
     "FluidBlockMixin",
     "CameraMixin",
     "SpawnRestrictionMixin",
-    "SpawnHelperMixin"
+    "SpawnHelperMixin",
+    "EntityNavigationMixin",
+    "MobNavigationMixin",
+    "FluidBlockMixin",
+    "LandPathNodeMakerMixin"
   ],
   "client": [
   ],

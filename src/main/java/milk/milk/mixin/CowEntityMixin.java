@@ -48,8 +48,8 @@ public abstract class CowEntityMixin extends AnimalEntity {
     @Overwrite
     public static DefaultAttributeContainer.Builder createCowAttributes() {
         return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 100.0D)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.30000001192092896D)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 30.0D)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.20000000298023224D)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1.0D)
                 .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 3.0D);
     }
